@@ -1,0 +1,37 @@
+Screenshot Capture & Stop Scripts
+This repository contains two scripts designed to work together to capture screenshots on a Windows machine and provide a way to stop the capture process gracefully.
+
+1. screenshot.ps1
+This PowerShell script continuously takes screenshots of the primary monitor every second and saves them as PNG files in a folder:
+
+Creates a folder at C:\Nopt\screenshots if it doesn’t exist.
+
+Takes a screenshot every second and saves it with a timestamped filename.
+
+Automatically stops after running for 1 hour.
+
+Also stops early if a file named stop.txt is detected inside the screenshots folder.
+
+This script is intended to run silently in the background and can be launched via the companion VBScript.
+
+2. start.vbs
+This VBScript is a simple launcher that runs the screenshot.ps1 PowerShell script silently and hidden:
+
+Executes the PowerShell script with execution policy bypass and hidden window.
+
+Designed to start the screenshot capture without showing a console window.
+
+3. stop.vbs (Optional)
+An additional VBScript that can be run to stop the screenshot capture process:
+
+Locates the C:\Nopt\screenshots folder.
+
+Creates a file named stop.txt inside the screenshots folder.
+
+When stop.txt is present, the PowerShell script detects it and stops taking screenshots.
+
+Usage
+Use start.vbs to begin capturing screenshots.
+
+Use stop.vbs to gracefully stop the capture process before the 1-hour timeout.
+
