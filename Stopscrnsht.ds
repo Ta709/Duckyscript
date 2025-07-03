@@ -1,0 +1,67 @@
+REM Open Run dialog
+GUI r
+DELAY 500
+
+REM Open powershell as admin
+STRING powershell -Command "Start-Process powershell -Verb runAs"
+ENTER
+DELAY 1500
+
+REM Create folder C:\Nopt if it doesn't exist (just in case)
+STRING New-Item -ItemType Directory -Path C:\Nopt -Force
+ENTER
+DELAY 500
+
+REM Write stop.vbs line 1
+STRING Add-Content -Path C:\Nopt\stop.vbs -Value 'Set fso = CreateObject("Scripting.FileSystemObject")'
+ENTER
+DELAY 400
+
+REM Write stop.vbs line 2
+STRING Add-Content -Path C:\Nopt\stop.vbs -Value 'screenshotsPath = "C:\Nopt\screenshots"'
+ENTER
+DELAY 400
+
+REM Write stop.vbs line 3
+STRING Add-Content -Path C:\Nopt\stop.vbs -Value 'stopFile = screenshotsPath & "\stop.txt"'
+ENTER
+DELAY 400
+
+REM Write stop.vbs line 4
+STRING Add-Content -Path C:\Nopt\stop.vbs -Value 'If Not fso.FolderExists(screenshotsPath) Then'
+ENTER
+DELAY 400
+
+REM Write stop.vbs line 5
+STRING Add-Content -Path C:\Nopt\stop.vbs -Value '    MsgBox "Screenshots folder not found!"'
+ENTER
+DELAY 400
+
+REM Write stop.vbs line 6
+STRING Add-Content -Path C:\Nopt\stop.vbs -Value 'Else'
+ENTER
+DELAY 400
+
+REM Write stop.vbs line 7
+STRING Add-Content -Path C:\Nopt\stop.vbs -Value '    Set stopFileHandle = fso.CreateTextFile(stopFile, True)'
+ENTER
+DELAY 400
+
+REM Write stop.vbs line 8
+STRING Add-Content -Path C:\Nopt\stop.vbs -Value '    stopFileHandle.WriteLine "stop"'
+ENTER
+DELAY 400
+
+REM Write stop.vbs line 9
+STRING Add-Content -Path C:\Nopt\stop.vbs -Value '    stopFileHandle.Close'
+ENTER
+DELAY 400
+
+REM Write stop.vbs line 10
+STRING Add-Content -Path C:\Nopt\stop.vbs -Value 'End If'
+ENTER
+DELAY 400
+
+REM Run stop.vbs silently
+STRING wscript.exe C:\Nopt\stop.vbs
+ENTER
