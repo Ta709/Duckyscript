@@ -1,0 +1,7 @@
+REM Fake Windows Update Screen
+DELAY 1000
+GUI r
+DELAY 500
+STRING powershell -windowstyle maximized -command ^
+"Add-Type -AssemblyName PresentationFramework; $window = New-Object System.Windows.Window; $window.WindowStyle='None'; $window.WindowState='Maximized'; $window.Topmost=$true; $text = New-Object System.Windows.Controls.TextBlock; $text.Text='Installing updates 99% complete. Do not turn off your PC.'; $text.FontSize=48; $text.HorizontalAlignment='Center'; $text.VerticalAlignment='Center'; $window.Content = $text; $window.ShowDialog()"
+ENTER
