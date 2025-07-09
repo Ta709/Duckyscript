@@ -1,0 +1,44 @@
+REM Decoy Ransomware Message with Detailed Skull ASCII Centered in green text
+DELAY 1000
+GUI r
+DELAY 500
+STRING cmd
+ENTER
+DELAY 800
+STRING color 0A
+ENTER
+STRING echo                           ______
+ENTER
+STRING echo                        .-"      "-.
+ENTER
+STRING echo                       /            \
+ENTER
+STRING echo                      |              |
+ENTER
+STRING echo                      |,  .-.  .-.  ,|
+ENTER
+STRING echo                      | )(_o/  \o_)( |
+ENTER
+STRING echo                      |/     /\     \|
+ENTER
+STRING echo                      (_     ^^     _)
+ENTER
+STRING echo                       \__|IIIIII|__/
+ENTER
+STRING echo                        | \IIIIII/ |
+ENTER
+STRING echo                        \          /
+ENTER
+STRING echo                         `--------`
+ENTER
+STRING echo.
+ENTER
+STRING echo                     Your files have been encrypted!
+ENTER
+STRING echo               To recover them, send 1 BTC to the address below.
+ENTER
+STRING echo              Contact attacker@example.com for instructions.
+ENTER
+STRING echo               WARNING: Do NOT turn off your computer.
+ENTER
+STRING pause
